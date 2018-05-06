@@ -13,6 +13,8 @@ import List, {
     ListItemText,
     ListItemSecondaryAction,
 } from 'material-ui/List';
+import SortableComponent from './SortableComponent'
+
 
 
 const styles = theme => ({
@@ -43,6 +45,8 @@ const styles = theme => ({
 
 });
 
+
+
 class Main extends Component {
 
     constructor(props) {
@@ -55,6 +59,7 @@ class Main extends Component {
         this.deleteNote = this.deleteNote.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
+
 
     componentWillMount() {
         const uid = auth.currentUser.uid;
@@ -93,13 +98,25 @@ class Main extends Component {
 
     render() {
         const classes = this.props.classes;
+        // const {notes} = this.state.notes;
+        console.log("in main-----")
+        console.log(this.state.notes)
         return (
             <Grid container className={classes.container}>
                 <Grid item xs={6}>
                     <Paper className={classes.paper}>
                         <h2>Hello, { auth.currentUser.displayName }</h2>
+                        {/*<SortableList items={this.state.items} onSortEnd={this.onSortEnd} />*/}
                             <List className={classes.list}>
+
+                                { this.state.notes.length > 0 ?
+                                    <SortableComponent items={this.state.notes}>
+
+                                    </SortableComponent>
+                                    : null
+                                }
                                 { /* Render the list of messages */
+
                                     this.state.notes.map( (note,index) =>
                                         <ListItem key={note.id}>
                                             <ListItemText primary={(index+1) + '. ' + note.text}/>
@@ -147,3 +164,4 @@ class Main extends Component {
 }
 
 export default withStyles(styles)(Main);
+
