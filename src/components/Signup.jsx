@@ -6,6 +6,7 @@ import Button from 'material-ui/Button';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+import Modal from 'material-ui/Modal';
 
 const styles = theme => ({
   root: {
@@ -24,7 +25,9 @@ class Signup extends Component {
         super(props);
         this.state = {
             email : "",
-            password : ""
+            password : "",
+            displayName : "",
+            isSignUpSuccess : false
         }
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -32,11 +35,17 @@ class Signup extends Component {
 
     onSubmit(event) {
         event.preventDefault();
-        const { email, password } = this.state;
+        const { email, password, displayName} = this.state;
         auth.createUserWithEmailAndPassword(email, password)
         .then(authUser => {
+            authUser.updateProfile({displayName: displayName});
             console.log(authUser);
-        })
+            authUser.sendEmailVerification();
+        }).then(()=>
+            this.setState({
+                isSignUpSuccess : true
+            })
+        )
         .catch(authError => {
             alert(authError);
         })
@@ -49,15 +58,26 @@ class Signup extends Component {
     };
 
     render() {
-        const { email, password } = this.state;
+        const { email, password, displayName } = this.state;
         const classes = this.props.classes;
         return (
             <div>
+                {/*{ this.state.isSignUpSuccess ? < Modal >hi</Modal> : null }*/}
                 <Grid container>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
                             <h1>Sign up</h1>
                             <form onSubmit={this.onSubmit} autoComplete="off">
+                                <TextField
+                                    id="displayName"
+                                    label="Your Name"
+                                    className={classes.textField}
+                                    value={displayName}
+                                    onChange={this.handleChange('displayName')}
+                                    margin="normal"
+                                    type="displayName"
+                                />
+                                <br />
                                 <TextField
                                   id="email"
                                   label="Email"

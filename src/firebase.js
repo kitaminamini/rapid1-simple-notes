@@ -1,16 +1,17 @@
 import firebase from 'firebase';
 
 const config = {
-    apiKey: "AIzaSyDOhyQXZMYPxIDRhUL9R3ar5j-DnP8qlL0",
-    authDomain: "simple-note-31073.firebaseapp.com",
-    databaseURL: "https://simple-note-31073.firebaseio.com",
-    projectId: "simple-note-31073",
-    storageBucket: "simple-note-31073.appspot.com",
-    messagingSenderId: "668969723863"
-};
-
-firebase.initializeApp(config);
+    apiKey: "AIzaSyAYgDkoIrccpH5J-at1LPuB0uevK0S5Y6o",
+    authDomain: "simple-note-56020.firebaseapp.com",
+    databaseURL: "https://simple-note-56020.firebaseio.com",
+    projectId: "simple-note-56020",
+    storageBucket: "simple-note-56020.appspot.com",
+    messagingSenderId: "641277414896"
+  };
+  firebase.initializeApp(config);
 
 export default firebase;
 export const db = firebase.database();
 export const auth = firebase.auth();
+export const facebookProvider = new firebase.auth.FacebookAuthProvider();
+export const googleProvider = new firebase.auth.GoogleAuthProvider();

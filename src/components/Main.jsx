@@ -52,6 +52,7 @@ class Main extends Component {
             current : ""
         };
         this.addNote = this.addNote.bind(this);
+        this.deleteNote = this.deleteNote.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -78,13 +79,25 @@ class Main extends Component {
         this.setState({ current : "" });
     }
 
+    deleteNote = noteId => event => {
+        event.preventDefault();
+        if (window.confirm("Are you sure you want to delete this note?")){
+            const uid = auth.currentUser.uid;
+            db.ref('notes/'+uid+'/'+noteId).remove(this.state.current);
+            window.location.reload();
+        }
+    };
+
+
+
+
     render() {
         const classes = this.props.classes;
         return (
             <Grid container className={classes.container}>
                 <Grid item xs={6}>
                     <Paper className={classes.paper}>
-                        <p>Hello, { auth.currentUser.email }</p>
+                        <h2>Hello, { auth.currentUser.displayName }</h2>
                             <List className={classes.list}>
                                 { /* Render the list of messages */
                                     this.state.notes.map( (note,index) =>
@@ -92,7 +105,7 @@ class Main extends Component {
                                             <ListItemText primary={(index+1) + '. ' + note.text}/>
                                             <ListItemSecondaryAction>
                                               <IconButton aria-label="Delete">
-                                                <DeleteIcon />
+                                                <DeleteIcon onClick={this.deleteNote(note.id)} />
                                               </IconButton>
                                             </ListItemSecondaryAction>
                                         </ListItem> )
@@ -112,6 +125,22 @@ class Main extends Component {
                             </form>
                     </Paper>
                 </Grid>
+
+                <Grid item xs={6}>
+                    <Paper className={classes.paper}>
+                        <h2>Your Profile</h2>
+                        <br/>
+                        <h3>Name: {auth.currentUser.displayName}</h3>
+                        <br/>
+                        <h3>Email: {auth.currentUser.email}</h3>
+                        <br/>
+                        <Button variant="raised" color="secondary"
+                                onClick={()=> {this.props.history.push('/editprofile')}}>
+                            Edit Profile
+                        </Button>
+                    </Paper>
+                </Grid>
+
             </Grid>
         );
     }
