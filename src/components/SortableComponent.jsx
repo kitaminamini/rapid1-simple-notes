@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
+import { auth, db } from '../firebase';
 import {
     SortableContainer,
     SortableElement,
@@ -25,7 +26,7 @@ const SortableList = SortableContainer(({items}) => {
     return (
         <ul>
             {items.map((note,index) => (
-                <SortableItem key={note.id} index={index} value={index+1+" "+note.text} />
+                <SortableItem key={`item-${index}`} index={index} value={index+1+" "+note.text} />
             ))}
         </ul>
     );
@@ -38,7 +39,7 @@ class SortableComponent extends Component {
         items: [],
     };
     onSortEnd = ({oldIndex, newIndex}) => {
-        const items = this.props.items;
+        const items = this.state.items;
 
         this.setState({
             items: arrayMove(items, oldIndex, newIndex),
@@ -58,7 +59,7 @@ class SortableComponent extends Component {
         console.log("in sortable conmp")
         console.log(this.props.items)
         // const {items} = this.props.items;
-        return <SortableList items={this.props.items} onSortEnd={this.onSortEnd} useDragHandle={true} />;
+        return <SortableList items={this.state.items} onSortEnd={this.onSortEnd} useDragHandle={true} />;
     }
 }
 
